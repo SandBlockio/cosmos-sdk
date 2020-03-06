@@ -3,6 +3,7 @@ package mock
 import (
 	"bytes"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	"math/rand"
 	"os"
 	"sort"
@@ -37,6 +38,7 @@ type App struct {
 	// TODO: Abstract this out from not needing to be auth specifically
 	AccountKeeper auth.AccountKeeper
 	ParamsKeeper  params.Keeper
+	SupplyKeeper types.SupplyKeeper
 
 	GenesisAccounts  []auth.Account
 	TotalCoinsSupply sdk.Coins
@@ -119,7 +121,7 @@ func (app *App) InitChainer(ctx sdk.Context, _ abci.RequestInitChain) abci.Respo
 		app.AccountKeeper.SetAccount(ctx, acc)
 	}
 
-	auth.InitGenesis(ctx, app.AccountKeeper, auth.DefaultGenesisState())
+	auth.InitGenesis(ctx, app.AccountKeeper, app.SupplyKeeper, auth.DefaultGenesisState())
 
 	return abci.ResponseInitChain{}
 }

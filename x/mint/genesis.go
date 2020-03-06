@@ -2,6 +2,7 @@ package mint
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
 // GenesisState - minter state
@@ -27,9 +28,10 @@ func DefaultGenesisState() GenesisState {
 }
 
 // InitGenesis new mint genesis
-func InitGenesis(ctx sdk.Context, keeper Keeper, data GenesisState) {
+func InitGenesis(ctx sdk.Context, keeper Keeper, supplyKeeper types.SupplyKeeper, data GenesisState) {
 	keeper.SetMinter(ctx, data.Minter)
 	keeper.SetParams(ctx, data.Params)
+	supplyKeeper.GetModuleAccount(ctx, ModuleName)
 }
 
 // ExportGenesis returns a GenesisState for a given context and keeper.
